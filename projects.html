@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Zakriya Asif Paracha</title>
+  <meta name="description" content="Embedded systems, FPGA, robotics, and software engineering projects by Zakriya Asif Paracha." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Projects — Zakriya Asif Paracha" />
+  <meta property="og:description" content="Embedded systems, FPGA, robotics, and software engineering projects." />
+  <meta property="og:image" content="assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/projects.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html" aria-current="page">Projects</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section" style="padding-bottom: 20px;">
+      <div class="container">
+        <div class="section-label">// projects</div>
+        <h1>Projects</h1>
+        <p class="text-dim" style="max-width: 640px;">
+          A selection of embedded, hardware, and software projects &mdash; from FPGA logic design
+          and robotics to backend tooling and image processing.
+        </p>
+
+        <div class="filter-row" role="group" aria-label="Filter projects by category">
+          <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-btn" data-filter="embedded" aria-pressed="false">Embedded / Hardware</button>
+          <button class="filter-btn" data-filter="fyp" aria-pressed="false">Final Year Project</button>
+          <button class="filter-btn" data-filter="software" aria-pressed="false">Software</button>
+          <button class="filter-btn" data-filter="image" aria-pressed="false">Image Processing</button>
+          <button class="filter-btn" data-filter="research" aria-pressed="false">Research</button>
+        </div>
+
+        <div class="project-grid">
+
+          <article class="project-card" data-category="embedded">
+            <div class="cat">Embedded / Hardware &middot; 2023</div>
+            <h3>Tic-Tac-Toe with Minimax on FPGA</h3>
+            <p>Single-player game implemented entirely on an FPGA, displayed via VGA monitor, using alpha-beta pruning to reduce the minimax search tree.</p>
+            <ul class="tag-list"><li class="tag">Xilinx</li><li class="tag">Verilog</li><li class="tag">Spartan-6</li></ul>
+            <div class="project-links">
+              <a href="https://github.com/ZakriyaParacha46/tic-tac-toe" target="_blank" rel="noopener">GitHub &rarr;</a>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="fyp">
+            <div class="cat">Final Year Project</div>
+            <h3>Optimizing Warehouse Item Transportation using Multi-Hop Robotic Networks</h3>
+            <p>Designed a fleet of ESP8266-based robots for multi-hop route optimization in warehouse settings, with a region-segmentation method to eliminate collisions and reduce sensor/actuator costs. Built a Python backend for route partitioning and robot collaboration, plus an Angular dashboard for real-time control and analytics. Demonstrated with three physical line-following robots and a Python simulation.</p>
+            <ul class="tag-list"><li class="tag">Python</li><li class="tag">ESP8266</li><li class="tag">MQTT</li><li class="tag">Angular</li></ul>
+            <div class="project-links">
+              <a href="https://www.youtube.com/watch?v=lE7WI73rEzg" target="_blank" rel="noopener">Demo &rarr;</a>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="embedded">
+            <div class="cat">Embedded / Hardware &middot; 2020</div>
+            <h3>MQTT-Based IoT Device Network</h3>
+            <p>NodeMCU and Raspberry Pi devices controlled via a custom Android app built in App Inventor, communicating over MQTT.</p>
+            <ul class="tag-list"><li class="tag">NodeMCU</li><li class="tag">Raspberry Pi</li><li class="tag">MQTT</li><li class="tag">App Inventor</li></ul>
+            <div class="project-links">
+              <a href="https://www.youtube.com/watch?v=jqbvDbIGS84" target="_blank" rel="noopener">Demo &rarr;</a>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="embedded">
+            <div class="cat">Embedded / Hardware &middot; 2023</div>
+            <h3>Pipelined Ripple Carry Adder</h3>
+            <p>Digital system design project implementing a pipelined ripple carry adder in HDL.</p>
+            <ul class="tag-list"><li class="tag">HDL</li><li class="tag">Digital Design</li></ul>
+          </article>
+
+          <article class="project-card" data-category="embedded">
+            <div class="cat">Embedded / Hardware &middot; 2023</div>
+            <h3>64-bit Carry Look-Ahead Adder</h3>
+            <p>Digital system design project implementing a 64-bit carry look-ahead adder in HDL.</p>
+            <ul class="tag-list"><li class="tag">HDL</li><li class="tag">Digital Design</li></ul>
+          </article>
+
+          <article class="project-card" data-category="embedded">
+            <div class="cat">Embedded / Hardware &middot; 2019</div>
+            <h3>Self-Balancing Robot</h3>
+            <p>A PID controller-based self-balancing robot.</p>
+            <ul class="tag-list"><li class="tag">PID Control</li><li class="tag">Embedded C</li></ul>
+          </article>
+
+          <article class="project-card" data-category="embedded">
+            <div class="cat">Embedded / Hardware &middot; 2022</div>
+            <h3>Arduino 2D Printer</h3>
+            <p>An Arduino-based 2D printer driven by serial input from Python, with basic image processing to prepare print data.</p>
+            <ul class="tag-list"><li class="tag">Arduino</li><li class="tag">Python</li><li class="tag">Image Processing</li></ul>
+          </article>
+
+          <article class="project-card" data-category="software">
+            <div class="cat">Software Engineering &middot; 2020&ndash;2021</div>
+            <h3>Ciphering/Deciphering and Compression Tools</h3>
+            <p>Implemented Block Cipher and Cyclic Block Cipher algorithms and a file/directory compression tool, polished into user-friendly Linux CLI tools.</p>
+            <ul class="tag-list"><li class="tag">C</li><li class="tag">Linux</li></ul>
+            <div class="project-links">
+              <a href="https://github.com/ZakriyaParacha46/Bytelocker-Linux-C-Encryption-tool" target="_blank" rel="noopener">Bytelocker &rarr;</a>
+              <a href="https://github.com/ZakriyaParacha46/Rain-linux-based-tool-for-Compressing-files" target="_blank" rel="noopener">Rain &rarr;</a>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="software">
+            <div class="cat">Software Engineering &middot; 2021</div>
+            <h3>C++ Audio Player</h3>
+            <p>An audio player built with WinForms and dirent.h.</p>
+            <ul class="tag-list"><li class="tag">C++</li><li class="tag">WinForms</li></ul>
+          </article>
+
+          <article class="project-card" data-category="image">
+            <div class="cat">Image Processing &middot; 2023</div>
+            <h3>Braille to Text Translator</h3>
+            <p>An image processing project that translates photographed Braille patterns into text.</p>
+            <ul class="tag-list"><li class="tag">Image Processing</li><li class="tag">Python</li></ul>
+          </article>
+
+          <article class="project-card" data-category="image">
+            <div class="cat">Image Processing &middot; 2023</div>
+            <h3>Image Classification Using Feature Extraction</h3>
+            <p>A computer vision project classifying images via handcrafted feature extraction.</p>
+            <ul class="tag-list"><li class="tag">Computer Vision</li><li class="tag">Feature Extraction</li></ul>
+          </article>
+
+          <article class="project-card" data-category="research">
+            <div class="cat">Research &middot; 2021</div>
+            <h3>Heuristic Approach to Minimizing Boolean Functions using Binary Trees</h3>
+            <p>A research project exploring a heuristic method for Boolean function minimization using binary tree structures.</p>
+            <ul class="tag-list"><li class="tag">Boolean Algebra</li><li class="tag">Algorithms</li></ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer &mdash; Embedded Systems Background<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
