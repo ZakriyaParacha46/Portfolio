@@ -825,13 +825,24 @@ code, .mono {
 }
 
 @media print {
+  :root {
+    --bg: #ffffff;
+    --bg-raised: #ffffff;
+    --bg-raised-2: #ffffff;
+    --text: #111318;
+    --text-dim: #454b54;
+    --text-dimmer: #6b7580;
+    --border: #cfd4da;
+    --accent: #1a7a45;
+  }
+
   .site-nav, .site-footer, #resume-download-bar, .skip-link {
     display: none !important;
   }
 
   body {
     background: #fff;
-    color: #111;
+    color: var(--text);
   }
 
   .resume-wrap {
@@ -839,17 +850,8 @@ code, .mono {
     padding: 0;
   }
 
-  .resume-section h2 {
-    color: #111;
-  }
-
-  .resume-entry-title .company,
-  .resume-header .accent {
-    color: #111;
-  }
-
   a {
-    color: #111;
+    color: var(--text);
     text-decoration: none;
   }
 }
