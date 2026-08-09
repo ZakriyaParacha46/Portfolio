@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arduino 2D Printer | Zakriya Asif Paracha</title>
+  <meta name="description" content="A 2D printer powered by an Arduino UNO, with Python-side image processing and a snake-pattern plotting algorithm driven by two stepper motors and a servo." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Arduino 2D Printer" />
+  <meta property="og:description" content="A 2D printer powered by an Arduino UNO, with Python-side image processing and a snake-pattern plotting algorithm." />
+  <meta property="og:image" content="../assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/projects/arduino-2d-printer.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="../index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../projects.html" aria-current="page">Projects</a></li>
+        <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../resume.html">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="project-detail-header">
+          <div class="section-label">// embedded / hardware &middot; 2022</div>
+          <h1>Arduino 2D Printer</h1>
+          <div class="project-detail-meta">
+            <span class="tag">Arduino</span>
+            <span class="tag">Python</span>
+            <span class="tag">Image Processing</span>
+          </div>
+          <div class="project-detail-links">
+            <a href="https://github.com/ZakriyaParacha46/2D-printer" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+
+        <div class="project-body">
+          <figure class="project-figure">
+            <img src="../assets/projects/arduino-2d-printer/intro.jpg" alt="Arduino 2D printer build" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>The finished printer.</figcaption>
+          </figure>
+
+          <h2>Overview</h2>
+          <p>
+            A 2D printer powered by an Arduino UNO, inspired by 2D CNC machines. Two NEMA17 stepper
+            motors handle each axis, plus a servo motor that drops or lifts a pen to plot dots. The
+            motors draw around 1.2A at 12V while printing. Internally, the Uno holds a 32x32 boolean
+            array, plotted one dot at a time, and a full image takes 2 to 4 minutes worst case, after
+            which the Python side prepares the next image.
+          </p>
+
+          <h2>How it works</h2>
+          <h3>Image processing</h3>
+          <p>
+            Uses the PIL Image module on the Python side. The source image is opened, converted to
+            black and white, and resized to 32x32 pixels. The result is plotted with matplotlib for a
+            preview, then sent to the Arduino over the serial port byte by byte.
+          </p>
+
+          <h3>Printing mechanism</h3>
+          <p>
+            A platform sits on the base. A stepper motor mounted on the platform controls y-axis
+            movement through a coupling connector linking the motor shaft to a threaded rod, and a
+            base mounted on that rod moves as the motor turns. A matching assembly controls x-axis
+            movement of the servo motor, which drops the pen to draw and lifts it to move without
+            marking the page. Stepper motors run off a 12V supply and are driven by pulses from the
+            Arduino; the servo is Arduino-controlled as well.
+          </p>
+          <p>
+            The Python program converts a .bmp image into a 32x32 pixel bit array and sends it over
+            serial. A green LED lights when the Arduino is ready to read; a red LED stays on while
+            printing. The Arduino reads the array, rebuilds it as a 2D array, and iterates through it in
+            a nested loop, dropping the pen on a 1 and lifting it on a 0. Once done, the stepper motors
+            return to the origin point.
+          </p>
+
+          <figure class="project-figure">
+            <img src="../assets/projects/arduino-2d-printer/schematic.jpg" alt="Printer schematic" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>Wiring schematic for the motors, drivers, and Arduino.</figcaption>
+          </figure>
+
+          <h3>Algorithm</h3>
+          <p>
+            A scanning algorithm following a snake pattern plots every point, giving the best time
+            efficiency without further optimization.
+          </p>
+
+          <h3>Specifications</h3>
+          <p>
+            Images of 8x8cm have been printed within 2 to 4 minutes. Pixel density is 35 steps per
+            pixel, roughly 1mm.
+          </p>
+
+          <h3>Structure</h3>
+          <p>
+            Built from wood. A 22x20cm board forms the base. 20x4.5cm and 22x5cm pieces form the motor
+            assembly bases, and 4.5x5cm and 4.5x4.5cm pieces form the walls, with holes drilled for the
+            threaded rods. Another 4.5x5cm piece serves as the platform for the second motor, supported
+            by wooden skewers glued to the walls.
+          </p>
+
+          <h3>Output</h3>
+          <figure class="project-figure">
+            <img src="../assets/projects/arduino-2d-printer/output.jpg" alt="Sample printed output" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>A finished print.</figcaption>
+          </figure>
+
+          <h2>Conclusions</h2>
+          <p>
+            A fun project that gave real insight into mechanics, mathematics, and motors, and hands-on
+            experience with Arduino serial communication, including casting data points from bools to
+            bytes and back for storage in the Arduino's array.
+          </p>
+
+          <h2>References</h2>
+          <ul>
+            <li><a href="https://www.youtube.com/watch?v=0qwrnUeSpYQ" target="_blank" rel="noopener">Stepper motor basics</a></li>
+            <li><a href="https://www.youtube.com/watch?v=S8YVlR_1hlo" target="_blank" rel="noopener">Worked example</a></li>
+          </ul>
+
+          <a class="back-link" href="../projects.html">&larr; Back to all projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer | Embedded Systems Background<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="../assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>

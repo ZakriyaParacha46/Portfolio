@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FPGA Tic-Tac-Toe with Minimax | Zakriya Asif Paracha</title>
+  <meta name="description" content="A single-player Tic-Tac-Toe game implemented entirely on an FPGA in Verilog, displayed over VGA, with alpha-beta pruned minimax as the opponent." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="FPGA Tic-Tac-Toe with Minimax" />
+  <meta property="og:description" content="A single-player Tic-Tac-Toe game implemented entirely on an FPGA in Verilog, displayed over VGA." />
+  <meta property="og:image" content="../assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/projects/fpga-tictactoe.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="../index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../projects.html" aria-current="page">Projects</a></li>
+        <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../resume.html">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="project-detail-header">
+          <div class="section-label">// embedded / hardware &middot; 2023</div>
+          <h1>FPGA Tic-Tac-Toe with Minimax</h1>
+          <div class="project-detail-meta">
+            <span class="tag">Xilinx</span>
+            <span class="tag">Verilog</span>
+            <span class="tag">Spartan-6</span>
+            <span class="tag">VGA</span>
+          </div>
+          <div class="project-detail-links">
+            <a href="https://github.com/ZakriyaParacha46/tic-tac-toe" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+
+        <div class="project-body">
+          <canvas class="project-animation project-animation-large" data-anim="tictactoe" width="560" height="340" role="img" aria-label="Animated Tic-Tac-Toe board playing itself, with a faint search tree flickering above each move"></canvas>
+
+          <h2>Overview</h2>
+          <p>
+            A single-player Tic-Tac-Toe game running entirely on an FPGA, with no CPU or
+            microcontroller involved. The board is drawn and updated over VGA, and the opponent is a
+            minimax search implemented directly in Verilog logic, with alpha-beta pruning to keep the
+            search tree small enough to run in hardware.
+          </p>
+
+          <h2>How it works</h2>
+          <h3>Display</h3>
+          <p>
+            The board and marks are rendered through a VGA timing generator built in Verilog, driving
+            the game state directly to a monitor without any frame buffer library or OS layer to lean on.
+          </p>
+          <h3>Opponent logic</h3>
+          <p>
+            The AI move is chosen with minimax search over the remaining board states. Alpha-beta
+            pruning cuts branches of the search tree that cannot affect the final decision, which
+            matters more on an FPGA than in software since every branch explored costs real logic and
+            cycles rather than being effectively free.
+          </p>
+
+          <a class="back-link" href="../projects.html">&larr; Back to all projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer | Embedded Systems Background<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="../assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>

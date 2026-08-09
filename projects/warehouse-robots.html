@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-Hop Robotic Warehouse Network | Zakriya Asif Paracha</title>
+  <meta name="description" content="Final year project: optimizing warehouse item transportation using a fleet of region-segmented, multi-hop robots." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Multi-Hop Robotic Warehouse Network" />
+  <meta property="og:description" content="Optimizing warehouse item transportation using a fleet of region-segmented, multi-hop robots." />
+  <meta property="og:image" content="../assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/projects/warehouse-robots.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="../index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../projects.html" aria-current="page">Projects</a></li>
+        <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../resume.html">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="project-detail-header">
+          <div class="section-label">// final year project &middot; 2024</div>
+          <h1>Optimizing Warehouse Item Transportation using Multi-Hop Robotic Networks</h1>
+          <div class="project-detail-meta">
+            <span class="tag">Python</span>
+            <span class="tag">ESP8266</span>
+            <span class="tag">MQTT</span>
+            <span class="tag">Angular</span>
+          </div>
+          <div class="project-detail-links">
+            <a href="https://www.youtube.com/watch?v=lE7WI73rEzg" target="_blank" rel="noopener">Demo &#8599;</a>
+          </div>
+        </div>
+
+        <div class="project-body">
+          <canvas class="project-animation project-animation-large" data-anim="warehouse" width="560" height="320" role="img" aria-label="Animated warehouse grid split into two regions, with robots moving inside their region and handing off a package at the boundary"></canvas>
+
+          <h2>Overview</h2>
+          <figure class="project-figure">
+            <img src="../assets/projects/warehouse-robots/overview-1.jpg" alt="Overview of the multi-hop warehouse robot project" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>Project overview, from the final year project presentation.</figcaption>
+          </figure>
+          <p>
+            Robotic systems in warehouses are usually held back by slow operation, high cost, and the
+            amount of infrastructure needed to install them. A lot of that cost comes from giving every
+            robot the sensors and actuators needed to avoid colliding with every other robot in the
+            building. This project takes a different approach: split the warehouse into regions sized
+            by local workload, and keep each robot confined to one region for the length of a delivery
+            cycle. Since robots never leave their own region, they never need to coordinate with robots
+            outside it, which removes most of the collision-avoidance cost.
+          </p>
+          <p>
+            Deliveries that need to cross a region boundary move through a pick-and-pass, multi-hop
+            handoff: a robot carries an item to an exchange point at the edge of its region and leaves
+            it there for the next region's robot to pick up. The whole mechanism runs autonomously with
+            minimal server involvement. It was demonstrated with three physical line-following robots,
+            backed by a Python simulation to validate the approach at larger scale.
+          </p>
+
+          <h2>How it works</h2>
+          <h3>Region segmentation</h3>
+          <p>
+            The warehouse floor is divided into regions sized by workload rather than uniform area, so
+            busier zones get smaller regions and more robot coverage. A robot is only ever responsible
+            for deliveries that start and end inside its own region.
+          </p>
+          <h3>Multi-hop handoff</h3>
+          <p>
+            When an item's destination lies outside the carrying robot's region, the robot delivers it
+            only as far as an exchange point on the boundary with the next region. The receiving
+            region's robot picks it up from there and continues, so an item can hop across several
+            regions to reach a far corner of the warehouse without any single robot ever leaving its
+            assigned zone.
+          </p>
+          <h3>Software stack</h3>
+          <figure class="project-figure">
+            <img src="../assets/projects/warehouse-robots/overview-2.jpg" alt="Warehouse robot fleet and dashboard" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>The robot fleet and control dashboard.</figcaption>
+          </figure>
+          <p>
+            A fleet of ESP8266-based robots communicate over MQTT. A Python backend handles route
+            partitioning and coordination between robots, and an Angular dashboard gives real-time
+            control and analytics over the whole fleet.
+          </p>
+
+          <div class="project-video">
+            <iframe src="https://www.youtube.com/embed/lE7WI73rEzg" title="Multi-Hop Robotic Warehouse Network demo" allowfullscreen loading="lazy"></iframe>
+          </div>
+
+          <a class="back-link" href="../projects.html">&larr; Back to all projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer | Embedded Systems Background<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="../assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>

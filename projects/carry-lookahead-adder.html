@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>64-bit Carry Look-Ahead Adder | Zakriya Asif Paracha</title>
+  <meta name="description" content="A 64-bit carry look-ahead adder built as a digital system design project, implemented in HDL." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="64-bit Carry Look-Ahead Adder" />
+  <meta property="og:description" content="A 64-bit carry look-ahead adder built as a digital system design project, implemented in HDL." />
+  <meta property="og:image" content="../assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/projects/carry-lookahead-adder.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="../index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../projects.html" aria-current="page">Projects</a></li>
+        <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../resume.html">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="project-detail-header">
+          <div class="section-label">// embedded / hardware &middot; 2023</div>
+          <h1>64-bit Carry Look-Ahead Adder</h1>
+          <div class="project-detail-meta">
+            <span class="tag">HDL</span>
+            <span class="tag">Digital Design</span>
+          </div>
+        </div>
+
+        <div class="project-body">
+          <canvas class="project-animation project-animation-large" data-anim="adder-lookahead" width="560" height="220" role="img" aria-label="Animated diagram showing carry bits arriving nearly simultaneously across a row of adder blocks"></canvas>
+
+          <h2>Overview</h2>
+          <p>
+            A 64-bit carry look-ahead adder, built alongside the ripple carry adder in the same
+            digital system design coursework as a direct comparison in approach. Instead of waiting
+            for each stage's carry to resolve in sequence, a look-ahead adder computes the carry into
+            every bit position up front, from the inputs directly, using generate and propagate
+            signals.
+          </p>
+
+          <h2>How it works</h2>
+          <p>
+            For each bit, the design computes whether that position generates a carry on its own or
+            propagates a carry coming in from a lower bit. Combining those signals across all 64 bits
+            lets the carry into any position be computed directly from the inputs, rather than waiting
+            on the chain of previous stages. The animation above shows the practical effect: carries
+            across the adder light up together instead of rippling one at a time, at the cost of more
+            logic to compute the generate and propagate terms across all 64 bits.
+          </p>
+
+          <a class="back-link" href="../projects.html">&larr; Back to all projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer | Embedded Systems Background<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="../assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>

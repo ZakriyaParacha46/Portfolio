@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Classification Using Feature Extraction | Zakriya Asif Paracha</title>
+  <meta name="description" content="A skin lesion classifier built on the PH2 dataset using handcrafted feature extraction: color, symmetry, irregularity, and phase, rather than a trained neural network." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Image Classification Using Feature Extraction" />
+  <meta property="og:description" content="A skin lesion classifier built on the PH2 dataset using handcrafted feature extraction." />
+  <meta property="og:image" content="../assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/projects/image-classification.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="../index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../projects.html" aria-current="page">Projects</a></li>
+        <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../resume.html">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="project-detail-header">
+          <div class="section-label">// image processing &middot; 2023</div>
+          <h1>Image Classification Using Feature Extraction</h1>
+          <div class="project-detail-meta">
+            <span class="tag">Python</span>
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Feature Extraction</span>
+          </div>
+          <div class="project-detail-links">
+            <a href="https://github.com/ZakriyaParacha46/Image-Processing" target="_blank" rel="noopener">GitHub &#8599;</a>
+            <a href="https://colab.research.google.com/drive/1JLdkbFz6NLO5h2hb9o4e8rUrNQLkFE5H?usp=sharing" target="_blank" rel="noopener">Colab &#8599;</a>
+          </div>
+        </div>
+
+        <div class="project-body">
+          <canvas class="project-animation project-animation-large" data-anim="feature" width="560" height="300" role="img" aria-label="Animated scan line sweeping across an image grid, lighting up detected feature points as it passes"></canvas>
+
+          <h2>Overview</h2>
+          <p>
+            Built around the PH2 dermoscopic image dataset, created to support research on skin lesion
+            segmentation and classification, and motivated by the rising occurrence of melanoma and the
+            need for computer-aided diagnosis. The dataset holds 200 images across three classes: 80
+            common nevi, 80 atypical nevi, and 40 melanomas, each with a lesion mask.
+          </p>
+          <p>
+            Rather than training a neural network, the classifier relies on handcrafted features,
+            color, symmetry, irregularity, and average phase, computed directly from each image, then
+            classifies by a voting mechanism across those features.
+          </p>
+
+          <figure class="project-figure">
+            <img src="../assets/projects/image-classification/dataset-sample.jpg" alt="Sample images from the PH2 dermoscopic dataset" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>Sample lesion images from the PH2 dataset.</figcaption>
+          </figure>
+
+          <h2>How it works</h2>
+          <h3>Steps</h3>
+          <ul>
+            <li><strong>Get file details:</strong> read <code>PH2_dataset.txt</code> to build a dictionary of <code>{class: [files in that class]}</code>.</li>
+            <li><strong>Choose the parameters:</strong> started from a large set of candidate parameters, judged each by classification quality, and kept only the useful ones.</li>
+            <li><strong>Calculate average class parameters:</strong> a nested loop applies the feature functions to every image and averages the results per class. The split between atypical and common nevi turned out weak.</li>
+            <li><strong>Classification:</strong> settled on 16 parameters for the final code (others produced errors), using a voting mechanism rather than distance-based classification, so each parameter's contribution could be checked individually.</li>
+          </ul>
+
+          <h3>Feature functions</h3>
+          <p>
+            <strong>Symmetry</strong> splits the image along its vertical and horizontal center lines,
+            mirrors one half onto the other, and XORs them. The resulting white pixel count captures
+            the asymmetry and curvature of the mole.
+          </p>
+          <p>
+            <strong>Colors</strong> splits the image into BGR channels and computes the histogram
+            average, mode, and standard deviation for each.
+          </p>
+          <p>
+            <strong>Irregularity and phase</strong>: irregularity applies a threshold and counts white
+            pixels to capture the overall gray distribution. Phase applies horizontal and vertical
+            Sobel operators and returns the magnitude and average phase of the image.
+          </p>
+
+          <h3>Output</h3>
+          <p>
+            Accuracy ranged from 58 to 75% depending on the train/test split, since the result is
+            sensitive to the chosen parameters. Final accuracy across the whole dataset was 63.3%.
+          </p>
+
+          <figure class="project-figure">
+            <img src="../assets/projects/image-classification/output.jpg" alt="Classification results and scatter plots" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>Classification output and class-separation scatter plots.</figcaption>
+          </figure>
+
+          <p class="text-dim" style="font-size:0.85rem;">
+            Assigned as coursework by <a href="https://www.linkedin.com/in/usmakram/" target="_blank" rel="noopener">Dr Usman Akram</a>.
+          </p>
+
+          <a class="back-link" href="../projects.html">&larr; Back to all projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer | Embedded Systems Background<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="../assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>

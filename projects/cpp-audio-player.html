@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C++ Audio Player | Zakriya Asif Paracha</title>
+  <meta name="description" content="A GUI audio player built with C++ and WinForms that simulates a car stereo, with playlist management and support for CD or USB media." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="C++ Audio Player" />
+  <meta property="og:description" content="A GUI audio player built with C++ and WinForms that simulates a car stereo." />
+  <meta property="og:image" content="../assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/projects/cpp-audio-player.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="../index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../projects.html" aria-current="page">Projects</a></li>
+        <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../resume.html">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="project-detail-header">
+          <div class="section-label">// software engineering &middot; 2021</div>
+          <h1>C++ Audio Player</h1>
+          <div class="project-detail-meta">
+            <span class="tag">C++</span>
+            <span class="tag">WinForms</span>
+            <span class="tag">dirent.h</span>
+          </div>
+          <div class="project-detail-links">
+            <a href="https://github.com/ZakriyaParacha46/Audio-Player" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+
+        <div class="project-body">
+          <figure class="project-figure">
+            <img src="../assets/projects/cpp-audio-player/intro.jpg" alt="C++ audio player interface" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>The player interface.</figcaption>
+          </figure>
+
+          <h2>Overview</h2>
+          <p>
+            A GUI audio player built in C++ with WinForms, simulating a car stereo. It plays from a CD
+            or USB drive, supports building and saving playlists, shuffling, adding or deleting songs,
+            and searching by name, and accepts .mp3 and .wav files. Mounting a device starts playback
+            immediately, with the current song name shown alongside pause, play, next, previous, and
+            power controls.
+          </p>
+
+          <h2>How it works</h2>
+          <p>
+            On start, a device is mounted through the <code>navigation</code> and
+            <code>storage_media</code> classes, which read the file names at the given path. A CD only
+            accepts .mp3 files, and a USB is capped at 16GB. The <code>aud_player</code> and
+            <code>aud_playerv2</code> classes handle playback: a playlist view lists every song and
+            supports shuffle, search, add, and delete, and selecting a song enables pause, stop, and
+            resume. The playlist itself is saved to a text file so it can be reloaded the next time the
+            program runs.
+          </p>
+
+          <figure class="project-figure">
+            <img src="../assets/projects/cpp-audio-player/uml.jpg" alt="UML class diagram for the audio player" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>UML class diagram: navigation, storage media, and player classes.</figcaption>
+          </figure>
+
+          <h3>Concepts used</h3>
+          <p>Abstraction, dynamic arrays, composition, file handling, and GUI programming with WinForms.</p>
+
+          <h3>Features</h3>
+          <ul>
+            <li>File handling and playlist persistence</li>
+            <li>File and folder browsing to add songs</li>
+            <li>Searching by name</li>
+            <li>Play / pause / resume / stop</li>
+            <li>Error and status handling for the current song and device</li>
+          </ul>
+
+          <p class="text-dim" style="font-size:0.85rem;">
+            Built with contributions from <a href="https://www.linkedin.com/in/aazain-umrani-494578241/" target="_blank" rel="noopener">Aazain Umarani</a>.
+          </p>
+
+          <a class="back-link" href="../projects.html">&larr; Back to all projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer | Embedded Systems Background<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="../assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>

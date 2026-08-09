@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Braille to Text Translator | Zakriya Asif Paracha</title>
+  <meta name="description" content="An image processing pipeline that converts a photographed page of Braille into English text using Gaussian blur, thresholding, erosion, and connected component analysis." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Braille to Text Translator" />
+  <meta property="og:description" content="An image processing pipeline that converts photographed Braille into English text." />
+  <meta property="og:image" content="../assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/projects/braille-translator.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="../index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../projects.html" aria-current="page">Projects</a></li>
+        <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../resume.html">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="project-detail-header">
+          <div class="section-label">// image processing &middot; 2023</div>
+          <h1>Braille to Text Translator</h1>
+          <div class="project-detail-meta">
+            <span class="tag">Python</span>
+            <span class="tag">OpenCV</span>
+            <span class="tag">Image Processing</span>
+          </div>
+          <div class="project-detail-links">
+            <a href="https://github.com/ZakriyaParacha46/Image-Processing" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+
+        <div class="project-body">
+          <canvas class="project-animation project-animation-large" data-anim="braille" width="560" height="300" role="img" aria-label="Animated Braille dot grid morphing between letters as each pattern fades in"></canvas>
+
+          <h2>Overview</h2>
+          <p>
+            Braille is a system of raised dots read by touch. Converting a photographed page of
+            Braille into text by hand is slow and error-prone, so this project automates it with a
+            classical image processing pipeline rather than a trained model: Gaussian blur,
+            thresholding, erosion, and connected component analysis (CCA) detect each individual
+            Braille character, a clustering step converts each one into a 6-character string, and a
+            lookup table translates that string back into a letter.
+          </p>
+
+          <h2>How it works</h2>
+          <h3>Preprocessing</h3>
+          <ul>
+            <li>Apply Gaussian blur to remove imperfections and stray pixels from the input image.</li>
+            <li>Convert the 8-bit grayscale image to binary to improve connectivity analysis.</li>
+            <li>Erode the image to shrink the white regions, causing black dots to spread and join into characters.</li>
+          </ul>
+
+          <h3>Methodology</h3>
+          <ul>
+            <li>Apply the CCA8 function to the eroded image to get the character count, per-object statistics, and a labeled object map.</li>
+            <li>Convert each object into a 6-character string, where each character represents one Braille dot.</li>
+            <li>Run post-processing (key creation and enhancement) to keep the translation accurate.</li>
+            <li>Output the converted text.</li>
+          </ul>
+
+          <figure class="project-figure">
+            <img src="../assets/projects/braille-translator/working.jpg" alt="Braille translation pipeline diagram" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>The overall conversion pipeline.</figcaption>
+          </figure>
+
+          <h3>Post-processing</h3>
+          <ul>
+            <li>Use the object statistics to measure the distance between consecutive objects, marking a gap as a space if it passes a threshold.</li>
+            <li>Draw a bounding box around each object from its length, width, and starting point, so one character is processed at a time.</li>
+            <li>Run the clustering step on each character: treat it as a vertical rectangle, crop it into a 3x2 grid, and check each cell to decide if it is a raised dot or blank.</li>
+          </ul>
+
+          <h3>Translation</h3>
+          <p>
+            The conversion table is a JSON file mapping Braille characters to English letters. Each key
+            is a 6-digit binary string representing a 3x2 Braille dot pattern (the first three digits
+            are the left column, the last three are the right column), and each value is the
+            corresponding lowercase letter. A translate function looks up each detected character in
+            this table to build the final output text. The conversion key itself was generated using
+            the same processing pipeline.
+          </p>
+
+          <figure class="project-figure">
+            <img src="../assets/projects/braille-translator/stage.jpg" alt="Braille conversion stages" loading="lazy" onerror="this.closest('figure').style.display='none'" />
+            <figcaption>Input image, erosion and CCA, and bounding box detection stages.</figcaption>
+          </figure>
+
+          <h3>Output</h3>
+          <p>
+            The pipeline successfully converted a 640-character Braille passage back into its original
+            English text, a paragraph about current affairs covering topics like the COVID-19 pandemic
+            and climate change.
+          </p>
+
+          <a class="back-link" href="../projects.html">&larr; Back to all projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer | Embedded Systems Background<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="../assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>
