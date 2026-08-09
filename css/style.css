@@ -1,5 +1,5 @@
 /* ============================================================
-   Zakriya Paracha — Portfolio
+   Zakriya Paracha Portfolio
    Dark minimalist theme with a subtle embedded/circuit accent
    ============================================================ */
 
@@ -719,6 +719,92 @@ code, .mono {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+/* ---------- Courses page ---------- */
+
+.course-group {
+  margin-bottom: 48px;
+}
+
+.course-group:last-child {
+  margin-bottom: 0;
+}
+
+.course-group-title {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.course-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.course-item {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border-soft);
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+}
+
+.course-item:last-child {
+  border-bottom: none;
+}
+
+.course-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.course-title {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+
+.course-provider {
+  font-family: var(--font-mono);
+  color: var(--text-dimmer);
+  font-size: 0.8rem;
+}
+
+.course-verify {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  margin-top: 6px;
+}
+
+.course-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  object-fit: cover;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+
+.course-desc {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .course-item {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 }
 
 /* ---------- Resume page ---------- */
