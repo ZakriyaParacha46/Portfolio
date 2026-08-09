@@ -487,6 +487,200 @@
     return function () { cancelAnimationFrame(raf); };
   }
 
+  /* ---------------- Arduino 2D printer (snake-pattern plot) ---------------- */
+  function initPlotter(canvas) {
+    var d = dpr(canvas), ctx = d.ctx, w = d.w, h = d.h;
+    var cols = 12, rows = 10;
+    var pad = 16;
+    var cellW = (w - pad * 2) / cols;
+    var cellH = (h - pad * 2) / rows;
+
+    var pattern = [];
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        var cx = c - cols / 2 + 0.5, cy = r - rows / 2 + 0.5;
+        pattern.push(Math.sqrt(cx * cx * 2.2 + cy * cy * 2.2) < rows / 2.1 ? 1 : 0);
+      }
+    }
+
+    function order() {
+      var seq = [];
+      for (var r = 0; r < rows; r++) {
+        if (r % 2 === 0) {
+          for (var c = 0; c < cols; c++) seq.push(r * cols + c);
+        } else {
+          for (var c = cols - 1; c >= 0; c--) seq.push(r * cols + c);
+        }
+      }
+      return seq;
+    }
+    var seq = order();
+    var frame = 0, raf, pos = 0;
+
+    function cellCenter(idx) {
+      var r = Math.floor(idx / cols), c = idx % cols;
+      return [pad + c * cellW + cellW / 2, pad + r * cellH + cellH / 2];
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = DIM;
+      ctx.lineWidth = 1;
+      for (var i = 0; i <= cols; i++) {
+        ctx.beginPath();
+        ctx.moveTo(pad + i * cellW, pad);
+        ctx.lineTo(pad + i * cellW, pad + rows * cellH);
+        ctx.stroke();
+      }
+      for (var j = 0; j <= rows; j++) {
+        ctx.beginPath();
+        ctx.moveTo(pad, pad + j * cellH);
+        ctx.lineTo(pad + cols * cellW, pad + j * cellH);
+        ctx.stroke();
+      }
+
+      for (var k = 0; k < pos && k < seq.length; k++) {
+        var idx = seq[k];
+        if (!pattern[idx]) continue;
+        var p = cellCenter(idx);
+        ctx.fillStyle = ACCENT;
+        ctx.beginPath();
+        ctx.arc(p[0], p[1], Math.min(cellW, cellH) * 0.28, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (pos < seq.length) {
+        var head = cellCenter(seq[pos]);
+        ctx.strokeStyle = TEXT;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(head[0], head[1], Math.min(cellW, cellH) * 0.42, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    function tick() {
+      frame++;
+      if (frame % 3 === 0) {
+        pos++;
+        if (pos > seq.length + 20) pos = 0;
+      }
+      draw();
+      raf = requestAnimationFrame(tick);
+    }
+
+    if (reduced) { pos = seq.length; draw(); return function () {}; }
+    tick();
+    return function () { cancelAnimationFrame(raf); };
+  }
+
+  /* ---------------- Audio player waveform ---------------- */
+  function initWaveform(canvas) {
+    var d = dpr(canvas), ctx = d.ctx, w = d.w, h = d.h;
+    var bars = 24;
+    var gap = 4;
+    var barW = (w - gap * (bars - 1)) / bars;
+    var seeds = [];
+    for (var i = 0; i < bars; i++) seeds.push(Math.random() * 10);
+    var frame = 0, raf;
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      var mid = h / 2;
+      for (var i = 0; i < bars; i++) {
+        var t = frame / 12 + seeds[i];
+        var amp = (0.35 + 0.65 * Math.abs(Math.sin(t) * Math.cos(t * 0.6))) * (h * 0.42);
+        var x = i * (barW + gap);
+        ctx.fillStyle = i % 4 === 0 ? ACCENT : TEXT;
+        ctx.globalAlpha = i % 4 === 0 ? 1 : 0.55;
+        ctx.fillRect(x, mid - amp / 2, barW, amp);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function tick() {
+      frame++;
+      draw();
+      raf = requestAnimationFrame(tick);
+    }
+
+    if (reduced) { draw(); return function () {}; }
+    tick();
+    return function () { cancelAnimationFrame(raf); };
+  }
+
+  /* ---------------- Boolean binary tree build ---------------- */
+  function initTree(canvas) {
+    var d = dpr(canvas), ctx = d.ctx, w = d.w, h = d.h;
+    var depth = 4;
+    var levelH = (h - 40) / depth;
+    var frame = 0, raf;
+
+    function nodesAtLevel(level) {
+      var count = Math.pow(2, level);
+      var out = [];
+      for (var i = 0; i < count; i++) {
+        var x = w * ((i + 0.5) / count);
+        var y = 24 + level * levelH;
+        out.push([x, y]);
+      }
+      return out;
+    }
+
+    function draw(revealLevels, alpha) {
+      ctx.clearRect(0, 0, w, h);
+      for (var lvl = 0; lvl < depth; lvl++) {
+        if (lvl > revealLevels) break;
+        var parents = nodesAtLevel(lvl);
+        var children = nodesAtLevel(lvl + 1);
+        var localAlpha = lvl === revealLevels ? alpha : 1;
+        ctx.globalAlpha = localAlpha;
+        ctx.strokeStyle = DIM;
+        ctx.lineWidth = 1.5;
+        parents.forEach(function (p, i) {
+          var left = children[i * 2], right = children[i * 2 + 1];
+          [left, right].forEach(function (c) {
+            ctx.beginPath();
+            ctx.moveTo(p[0], p[1]);
+            ctx.lineTo(c[0], c[1]);
+            ctx.stroke();
+          });
+        });
+        ctx.globalAlpha = 1;
+      }
+
+      for (var lvl2 = 0; lvl2 <= Math.min(revealLevels, depth); lvl2++) {
+        var pts = nodesAtLevel(lvl2);
+        var a = lvl2 === revealLevels ? alpha : 1;
+        ctx.globalAlpha = a;
+        pts.forEach(function (p) {
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], lvl2 === 0 ? 7 : 5, 0, Math.PI * 2);
+          ctx.fillStyle = lvl2 === revealLevels ? ACCENT : TEXT;
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function tick() {
+      frame++;
+      var cycle = frame % (depth * 40 + 40);
+      var lvl = Math.min(depth, Math.floor(cycle / 40));
+      var alpha = Math.min(1, (cycle % 40) / 24);
+      if (cycle >= depth * 40) {
+        draw(depth, 1);
+      } else {
+        draw(lvl, alpha);
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    if (reduced) { draw(depth, 1); return function () {}; }
+    tick();
+    return function () { cancelAnimationFrame(raf); };
+  }
+
   var registry = {
     tictactoe: function (el) { return initTicTacToe(el); },
     "adder-ripple": function (el) { return initAdder(el, "ripple"); },
@@ -496,7 +690,10 @@
     mqtt: function (el) { return initMqtt(el); },
     cipher: function (el) { return initCipher(el); },
     braille: function (el) { return initBraille(el); },
-    feature: function (el) { return initFeatureScan(el); }
+    feature: function (el) { return initFeatureScan(el); },
+    plotter: function (el) { return initPlotter(el); },
+    waveform: function (el) { return initWaveform(el); },
+    tree: function (el) { return initTree(el); }
   };
 
   function boot() {
