@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ciphering/Deciphering and Compression Tools | Zakriya Asif Paracha</title>
-  <meta name="description" content="Linux CLI tools implementing Block Cipher and Cyclic Block Cipher algorithms and a file/directory compression tool, written in C." />
+  <title>FPGA Tic-Tac-Toe with Minimax | Zakriya Asif Paracha</title>
+  <meta name="description" content="A single-player Tic-Tac-Toe game implemented entirely on an FPGA in Verilog, displayed over VGA, with alpha-beta pruned minimax as the opponent." />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Ciphering/Deciphering and Compression Tools" />
-  <meta property="og:description" content="Linux CLI tools for block cipher encryption and file compression, written in C." />
+  <meta property="og:title" content="FPGA Tic-Tac-Toe with Minimax" />
+  <meta property="og:description" content="A single-player Tic-Tac-Toe game implemented entirely on an FPGA in Verilog, displayed over VGA." />
   <meta property="og:image" content="../assets/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
-  <link rel="canonical" href="https://zakriyaparacha.com/projects/cipher-compression-tools.html" />
+  <link rel="canonical" href="https://zakriyaparacha.com/beyond-software/fpga-tictactoe.html" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,8 +31,9 @@
       <ul class="nav-links" id="nav-links">
         <li><a href="../index.html">Home</a></li>
         <li><a href="../about.html">About</a></li>
-        <li><a href="../projects.html" aria-current="page">Projects</a></li>
+        <li><a href="../projects.html">Projects</a></li>
         <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../beyond-software.html" aria-current="page">Beyond Software</a></li>
         <li><a href="../resume.html">Resume</a></li>
         <li><a href="../index.html#contact">Contact</a></li>
       </ul>
@@ -43,44 +44,45 @@
     <section class="section">
       <div class="container">
         <div class="project-detail-header">
-          <div class="section-label">// software engineering &middot; 2020-2021</div>
-          <h1>Ciphering/Deciphering and Compression Tools</h1>
+          <div class="section-label">// embedded / hardware &middot; 2023</div>
+          <h1>FPGA Tic-Tac-Toe with Minimax</h1>
           <div class="project-detail-meta">
-            <span class="tag">C</span>
-            <span class="tag">Linux</span>
+            <span class="tag">Xilinx</span>
+            <span class="tag">Verilog</span>
+            <span class="tag">Spartan-6</span>
+            <span class="tag">VGA</span>
           </div>
           <div class="project-detail-links">
-            <a href="https://github.com/ZakriyaParacha46/Bytelocker-Linux-C-Encryption-tool" target="_blank" rel="noopener">Bytelocker on GitHub &#8599;</a>
-            <a href="https://github.com/ZakriyaParacha46/Rain-linux-based-tool-for-Compressing-files" target="_blank" rel="noopener">Rain on GitHub &#8599;</a>
+            <a href="https://github.com/ZakriyaParacha46/tic-tac-toe" target="_blank" rel="noopener">GitHub &#8599;</a>
           </div>
         </div>
 
         <div class="project-body">
-          <span class="cipher-text cipher-text-large">Current affairs refer to events happening in the present time.</span>
+          <canvas class="project-animation project-animation-large" data-anim="tictactoe" width="560" height="340" role="img" aria-label="Animated Tic-Tac-Toe board playing itself, with a faint search tree flickering above each move"></canvas>
 
           <h2>Overview</h2>
           <p>
-            Two related Linux command-line tools built in C: Bytelocker, an encryption tool, and Rain,
-            a file and directory compression tool. Both started as coursework exercises and were
-            polished into standalone CLI tools with proper argument handling rather than left as
-            one-off scripts.
+            A single-player Tic-Tac-Toe game running entirely on an FPGA, with no CPU or
+            microcontroller involved. The board is drawn and updated over VGA, and the opponent is a
+            minimax search implemented directly in Verilog logic, with alpha-beta pruning to keep the
+            search tree small enough to run in hardware.
           </p>
 
           <h2>How it works</h2>
-          <h3>Bytelocker</h3>
+          <h3>Display</h3>
           <p>
-            Implements Block Cipher and Cyclic Block Cipher algorithms for encrypting and decrypting
-            files from the command line, along with an XOR cipher and electronic codebook mode used in
-            related freelance work on the same topic.
+            The board and marks are rendered through a VGA timing generator built in Verilog, driving
+            the game state directly to a monitor without any frame buffer library or OS layer to lean on.
           </p>
-          <h3>Rain</h3>
+          <h3>Opponent logic</h3>
           <p>
-            A file and directory compression tool for Linux, built to reduce a directory tree down to
-            a single compressed archive and reverse the process on demand, wrapped in the same
-            CLI-first approach as Bytelocker.
+            The AI move is chosen with minimax search over the remaining board states. Alpha-beta
+            pruning cuts branches of the search tree that cannot affect the final decision, which
+            matters more on an FPGA than in software since every branch explored costs real logic and
+            cycles rather than being effectively free.
           </p>
 
-          <a class="back-link" href="../projects.html">&larr; Back to all projects</a>
+          <a class="back-link" href="../beyond-software.html">&larr; Back to Beyond Software</a>
         </div>
       </div>
     </section>

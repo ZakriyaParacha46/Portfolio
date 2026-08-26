@@ -10,8 +10,10 @@ Live at [zakriyaparacha.com](https://zakriyaparacha.com).
 /
   index.html          Home: hero, about teaser, featured projects
   about.html           Full bio, work experience timeline, education, skills
-  projects.html        All projects, filterable by category
-  projects/*.html      One detail page per major project
+  projects.html        Software projects (full-stack, backend)
+  projects/*.html      One detail page per software project
+  beyond-software.html  Embedded/hardware/robotics projects, kept as a personal hobby
+  beyond-software/*.html One detail page per hobby project
   courses.html          Self-learning: Coursera specializations and courses
   resume.html          Print-friendly resume with a PDF download
   css/style.css         Shared styles (dark theme, layout, components)

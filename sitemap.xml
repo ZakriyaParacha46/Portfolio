@@ -21,47 +21,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://zakriyaparacha.com/beyond-software.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://zakriyaparacha.com/resume.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://zakriyaparacha.com/projects/fpga-tictactoe.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://zakriyaparacha.com/projects/ripple-carry-adder.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://zakriyaparacha.com/projects/carry-lookahead-adder.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://zakriyaparacha.com/projects/self-balancing-robot.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://zakriyaparacha.com/projects/arduino-2d-printer.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://zakriyaparacha.com/projects/mqtt-iot-network.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://zakriyaparacha.com/projects/cipher-compression-tools.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://zakriyaparacha.com/projects/cpp-audio-player.html</loc>
+    <loc>https://zakriyaparacha.com/projects/warehouse-robots.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -71,18 +41,23 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://zakriyaparacha.com/projects/image-classification.html</loc>
+    <loc>https://zakriyaparacha.com/projects/cpp-audio-player.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://zakriyaparacha.com/projects/boolean-minimization.html</loc>
+    <loc>https://zakriyaparacha.com/beyond-software/fpga-tictactoe.html</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://zakriyaparacha.com/projects/warehouse-robots.html</loc>
+    <loc>https://zakriyaparacha.com/beyond-software/self-balancing-robot.html</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://zakriyaparacha.com/beyond-software/arduino-2d-printer.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
 </urlset>

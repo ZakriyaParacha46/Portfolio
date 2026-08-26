@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>64-bit Carry Look-Ahead Adder | Zakriya Asif Paracha</title>
-  <meta name="description" content="A 64-bit carry look-ahead adder built as a digital system design project, implemented in HDL." />
+  <title>Self-Balancing Robot | Zakriya Asif Paracha</title>
+  <meta name="description" content="A self-balancing robot controlled with a PID controller, built in 2019." />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="64-bit Carry Look-Ahead Adder" />
-  <meta property="og:description" content="A 64-bit carry look-ahead adder built as a digital system design project, implemented in HDL." />
+  <meta property="og:title" content="Self-Balancing Robot" />
+  <meta property="og:description" content="A self-balancing robot controlled with a PID controller." />
   <meta property="og:image" content="../assets/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
-  <link rel="canonical" href="https://zakriyaparacha.com/projects/carry-lookahead-adder.html" />
+  <link rel="canonical" href="https://zakriyaparacha.com/beyond-software/self-balancing-robot.html" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,8 +31,9 @@
       <ul class="nav-links" id="nav-links">
         <li><a href="../index.html">Home</a></li>
         <li><a href="../about.html">About</a></li>
-        <li><a href="../projects.html" aria-current="page">Projects</a></li>
+        <li><a href="../projects.html">Projects</a></li>
         <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../beyond-software.html" aria-current="page">Beyond Software</a></li>
         <li><a href="../resume.html">Resume</a></li>
         <li><a href="../index.html#contact">Contact</a></li>
       </ul>
@@ -43,37 +44,36 @@
     <section class="section">
       <div class="container">
         <div class="project-detail-header">
-          <div class="section-label">// embedded / hardware &middot; 2023</div>
-          <h1>64-bit Carry Look-Ahead Adder</h1>
+          <div class="section-label">// embedded / hardware &middot; 2019</div>
+          <h1>Self-Balancing Robot</h1>
           <div class="project-detail-meta">
-            <span class="tag">HDL</span>
-            <span class="tag">Digital Design</span>
+            <span class="tag">PID Control</span>
+            <span class="tag">Embedded C</span>
           </div>
         </div>
 
         <div class="project-body">
-          <canvas class="project-animation project-animation-large" data-anim="adder-lookahead" width="560" height="220" role="img" aria-label="Animated diagram showing carry bits arriving nearly simultaneously across a row of adder blocks"></canvas>
+          <canvas class="project-animation project-animation-large" data-anim="pendulum" width="560" height="260" role="img" aria-label="Animated inverted pendulum balancing and correcting itself, wobbling under small disturbances"></canvas>
 
           <h2>Overview</h2>
           <p>
-            A 64-bit carry look-ahead adder, built alongside the ripple carry adder in the same
-            digital system design coursework as a direct comparison in approach. Instead of waiting
-            for each stage's carry to resolve in sequence, a look-ahead adder computes the carry into
-            every bit position up front, from the inputs directly, using generate and propagate
-            signals.
+            A self-balancing robot built around a PID controller, one of my earliest embedded
+            projects, from 2019. The robot uses feedback from its own tilt to drive its wheels in the
+            direction that keeps it upright, the same inverted pendulum problem at the core of
+            everything from Segways to rocket landings.
           </p>
 
           <h2>How it works</h2>
           <p>
-            For each bit, the design computes whether that position generates a carry on its own or
-            propagates a carry coming in from a lower bit. Combining those signals across all 64 bits
-            lets the carry into any position be computed directly from the inputs, rather than waiting
-            on the chain of previous stages. The animation above shows the practical effect: carries
-            across the adder light up together instead of rippling one at a time, at the cost of more
-            logic to compute the generate and propagate terms across all 64 bits.
+            A PID controller reads the current tilt angle and continuously computes a correction: the
+            proportional term reacts to how far off vertical the robot currently is, the integral term
+            corrects for any small steady lean that persists over time, and the derivative term reacts
+            to how fast the tilt is changing to avoid overshooting the correction. The animation above
+            shows the same behavior in miniature: a small disturbance tips the pendulum, and the
+            correction pulls it back toward vertical, oscillating a little before settling.
           </p>
 
-          <a class="back-link" href="../projects.html">&larr; Back to all projects</a>
+          <a class="back-link" href="../beyond-software.html">&larr; Back to Beyond Software</a>
         </div>
       </div>
     </section>
