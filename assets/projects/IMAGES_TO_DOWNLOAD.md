@@ -2,25 +2,11 @@
 
 Right-click each URL below, "Save Image As," and save it with the exact filename shown into the matching folder (create the folders if they do not exist). Once done, delete this file.
 
-## assets/projects/arduino-2d-printer/
-- intro.jpg
-  https://lh3.googleusercontent.com/sitesv/AG8ngQXlWOWQODD7FWjxum5SJbJ_tL5t_y9WrXS5P5Nl3SNxr8fUwJrq554XAXYl98mlYGV6Yw8v7wjzRhxbIp-P_X99TWv4IbBwvOQOVszeJZ_prSd-dhAPms8qvrJgaimq9QHS8dI2T6pFOwi5SecZIbiCp51_dOgBvsWGUgMNDEp4DpgFSw2l8iEDxfUBAd_WQKfggfjA7ftp4lKCN4mvfw7bi0FmbFvqJryFTL2dmvQ=w1280
-- schematic.jpg
-  https://lh3.googleusercontent.com/sitesv/AG8ngQXzMFNMlqfJfWvs2D0bZcrfHkcgq3Io4kogGNok02XXspSdrDOvOBUs6GH6PveCHdlQE-HQOiPmLHT7bTqv--VzW_u9dzyO9FmAPqnykobSNNsAjhiDX29UGU7TAiH__aPwyEom_UuTAXgjU9RG7TvZLBh-rInC10Q65gCm7vJXkxoJcRBBQ9PYay2hcx44Z27BWi4vDiDGDuCujfC67YzT3JSJKLJUkc0VRzkuvPE=w1280
-- output.jpg
-  https://lh3.googleusercontent.com/sitesv/AG8ngQUUOFe8JUNjQXnFRAxPbwujmEjT89JuC9De4z901hYG0F4jYoKdhdsa_o7hHMSh5bWVAM-n3ZqBVs9FyMmTeQ_J72iK3_Z7G4fXk2iAyH7U4XPcq65LOCI2PpNLkiAuPT3Qzm9JpPHKRASR6HJaNG13-GJwWgV4K-Ik043p80WE37ArKhM4rjxUChTT8MMJnRA3aCygRMmQnNtKYJOQ8pGdgFeefM9ZwC5SRGR1dT0=w1280
-
-## assets/projects/braille-translator/
-- working.jpg
-  https://lh3.googleusercontent.com/sitesv/AG8ngQVW4ZcXTCerYDD-QxzyCOTLzYR-eLgQzR-ZKKytudrG_XUZuG2JZM8J58qyLcWR71nilBXwHH6Goa9K68Emk-aqpukwFL7ViNJ9Wl3u-gceJFxCj21NwKE75_1PQG1091nDvxxmqslAEg9IpR8BPTy3FHjqVMEotTfmaVqBhRGWrSHJxYAXfQ2qcR8LyQYdWB-SXsazPrsJUZaXZvEA4-WLHrWLlJcv1OoxvjLpDF8=w1280
-- stage.jpg
-  https://lh3.googleusercontent.com/sitesv/AG8ngQWwQKkQILp-5wAPz24788DslUGcdbxynQW0Gks2Nuffq2N-9gb4zgVHXzS269ylSOxOkzbaQtiZmxQEs9EN7tLOnYpg3H6wzz2D9s8K9x3ed4C3EmOeenY2O-9VSJYYqz2pQfCC0tzzKpe8u9NOnaf7YLWDU8eAzkSX_nydkAqtJAUoW-13U4PaWPPpzQkCKgbSswMqcvDHUPiYRU_PwKHb_7a_OMWPz28owLAP9sY=w1280
-
 ## assets/projects/cpp-audio-player/
-- intro.jpg
-  https://lh3.googleusercontent.com/sitesv/AG8ngQWcnttDtqeoK96lcsxDeyUS-0OERZPNxd25S5HyAo8PKLpunkchvwk5cS0orkvW50hrASDB3BQ4Nebe4_BfuRnToVlf6wwQu9hHJ6BlqPy0ApI8ITsv8Csisc7yKjCrnyND4kqTR8W1fWbeVPfvEBKqSnVqd5T0QUlCcZDgbp1BYktstyj1K351Xr_hstglqS7YFldsFWYdWrAyI8xhoNR4b6DungqliDZrbbX7=w1280
 - uml.jpg
   https://lh3.googleusercontent.com/sitesv/AG8ngQUdE589useukay6ZPNl9UTNx9ALRulFn1Q09Nhjmt4zdYlystr3EmeIYG08mKVIChfpVFJOLHc4eCsbqmGPcBLLDl7O8_guqD9gJsFMALcxTxQTyIWNSC8rq4XirdoeGzwoRZIbNL2ACCHxVowgcooTT9hOR-IGzPFunjhWQAkLBbGpuSIKBxWeS6QaNad3QZAsk37pteqWqqdx4JPlioRB9qEiKTt4RCUBDGkhVA0=w1280
+
+  (intro.jpg no longer needed &mdash; replaced by home-page.png)
 
 ## assets/projects/warehouse-robots/
 - overview-1.jpg

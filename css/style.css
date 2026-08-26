@@ -874,10 +874,12 @@ code, .mono {
   margin: 20px 0;
 }
 
-.project-figure img {
+.project-figure img,
+.project-figure video {
   border-radius: var(--radius);
   border: 1px solid var(--border);
   width: 100%;
+  display: block;
 }
 
 .project-figure figcaption {
@@ -885,6 +887,12 @@ code, .mono {
   font-size: 0.78rem;
   color: var(--text-dimmer);
   margin-top: 8px;
+}
+
+.project-figure--narrow {
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .project-video {
