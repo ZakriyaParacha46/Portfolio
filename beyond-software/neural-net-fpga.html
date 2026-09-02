@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neural Network on an FPGA | Zakriya Asif Paracha</title>
+  <meta name="description" content="A handwritten-digit classifier trained in PyTorch, quantized to INT8, and rebuilt from scratch as a 7-stage Verilog pipeline running entirely on FPGA silicon." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Neural Network on an FPGA" />
+  <meta property="og:description" content="A handwritten-digit classifier trained in PyTorch, quantized to INT8, and rebuilt from scratch in Verilog, running entirely on FPGA silicon." />
+  <meta property="og:image" content="../assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/beyond-software/neural-net-fpga.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="../index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../projects.html">Projects</a></li>
+        <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../beyond-software.html" aria-current="page">Beyond Software</a></li>
+        <li><a href="../resume.html">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="project-detail-header">
+          <div class="section-label">// machine learning / embedded &middot; 2026</div>
+          <h1>Neural Network on an FPGA</h1>
+          <div class="project-detail-meta">
+            <span class="tag">PyTorch</span>
+            <span class="tag">Verilog</span>
+            <span class="tag">INT8 Quantization</span>
+            <span class="tag">Basys 3</span>
+            <span class="tag">MNIST</span>
+          </div>
+          <div class="project-detail-links">
+            <a href="https://github.com/ZakriyaParacha46/neural-net-on-fpga" target="_blank" rel="noopener">GitHub &#8599;</a>
+          </div>
+        </div>
+
+        <div class="project-body">
+          <canvas class="project-animation project-animation-large" data-anim="neural" width="560" height="340" role="img" aria-label="Animated diagram of a neural network's layers lighting up during a forward pass, ending on a highlighted output"></canvas>
+
+          <h2>Overview</h2>
+          <p>
+            A handwritten-digit classifier trained in PyTorch, quantized to INT8, and rebuilt
+            from scratch in Verilog, running entirely on FPGA silicon. There is no CPU, no
+            operating system, and no soft core anywhere in the design. A camera captures the
+            input, the chip does the math, and a seven-segment display shows the answer.
+          </p>
+
+          <div class="stat-grid">
+            <div class="stat-card">
+              <span class="num">94.57%</span>
+              <span class="label">INT8 test accuracy (94.75% at float32)</span>
+            </div>
+            <div class="stat-card">
+              <span class="num">4&times;</span>
+              <span class="label">weight memory reduction: 98KB to 25KB</span>
+            </div>
+            <div class="stat-card">
+              <span class="num">0.51ms</span>
+              <span class="label">full inference latency, 50,984 clock cycles</span>
+            </div>
+            <div class="stat-card">
+              <span class="num">7</span>
+              <span class="label">pipeline stages, all in hardware</span>
+            </div>
+          </div>
+
+          <h2>Training and quantization</h2>
+          <p>
+            The network itself is small on purpose: a 784 &rarr; 32 &rarr; 10 multilayer
+            perceptron, trained on MNIST for eight epochs in PyTorch. Inputs are scaled to
+            0&ndash;255 rather than normalized, because that is the range the camera pipeline
+            actually produces. The network is calibrated for the hardware it will run on from
+            the first training step.
+          </p>
+          <p>
+            Every weight is quantized to INT8 with a symmetric per-tensor scale. Biases stay
+            INT32, and the layer-1 accumulator is requantized with a right-shift instead of a
+            divider, so the FPGA never needs to implement division. The accuracy cost of all
+            this is 0.18 percentage points. The memory cost is a quarter of what it was.
+          </p>
+          <p>
+            What is left is exported as <code>.mem</code> files and loaded straight into block
+            ROM. From there, everything happens as hand-written Verilog state machines:
+            capturing the camera feed, cropping and thresholding it, running the
+            multiply-accumulate loop, and driving the display. There is no instruction fetch,
+            no driver stack, and no operating system involved.
+          </p>
+
+          <figure class="project-figure project-figure--narrow">
+            <img src="../assets/projects/neural-net-fpga/mnist-samples.jpg" alt="A strip of real MNIST test digits reading 7, 2, 1, 0, 4" loading="lazy" width="900" height="180" />
+            <figcaption>Real MNIST test digits, run through the actual quantized model. Not illustrations.</figcaption>
+          </figure>
+
+          <h2>The hardware pipeline</h2>
+          <p>Seven stages, every one running every clock cycle.</p>
+
+          <h3>01. Camera capture and configuration</h3>
+          <p>
+            The OV7670 camera is configured over SCCB at power-up: 75 register writes, no
+            microcontroller involved. It streams RGB565 at 640&times;480, 30fps.
+            <code class="mono">camera_driver.v</code>
+          </p>
+
+          <h3>02. Grayscale conversion and subsample</h3>
+          <p>
+            RGB565 is converted to 8-bit luma on the fly, then subsampled 2&times; in X and Y
+            down to 320&times;240, in the camera's own clock domain.
+            <code class="mono">capture_writer.v</code>
+          </p>
+
+          <h3>03. Dual-port frame buffer</h3>
+          <p>
+            Block RAM holds the live frame, with independent read ports for the VGA display and
+            the downsampler running at the same time.
+            <code class="mono">frame_buffer.v</code>
+          </p>
+
+          <h3>04. Downsample: 112&times;112 crop to 28&times;28</h3>
+          <p>
+            The frame is center-cropped, then every 4&times;4 block is averaged into one pixel.
+            Noise-suppressing and MNIST-sized in about 0.13ms.
+            <code class="mono">downsampler.v</code>
+          </p>
+
+          <h3>05. Preprocess: invert and threshold</h3>
+          <p>
+            Pure combinational logic: a wire with arithmetic built into it. Zero clock cycles of
+            latency, no state at all.
+            <code class="mono">preprocessing.v</code>
+          </p>
+
+          <h3>06. Inference: the network as a state machine</h3>
+          <p>
+            784&times;32, then 32&times;10 multiply-accumulates, with ReLU and shift-requantize
+            between layers, then argmax at the end. 50,984 cycles total.
+            <code class="mono">inference_engine.v</code>
+          </p>
+
+          <h3>07. Display: VGA and seven-segment output</h3>
+          <p>
+            Four live pipeline views are multiplexed onto VGA by coordinate math alone, plus the
+            predicted digit and confidence on the seven-segment displays.
+            <code class="mono">vga_driver.v, segment_driver.v</code>
+          </p>
+
+          <figure class="project-figure">
+            <img src="../assets/projects/neural-net-fpga/board-setup.jpg" alt="The Basys 3 board wired to an OV7670 camera, mid-run, with the seven-segment display lit" loading="lazy" width="1030" height="686" />
+            <figcaption>The Basys 3 board mid-run: camera wired in, seven-segment display lit with the predicted digit.</figcaption>
+          </figure>
+
+          <h2>Repository</h2>
+          <p>Cleanly separated: model, hardware, and the video explainer itself.</p>
+          <ul>
+            <li><strong>python/</strong>: training, INT8 quantization, and demo-sample generation in PyTorch and NumPy.</li>
+            <li><strong>hdl/</strong>: the full 7-stage Verilog pipeline, pin constraints, and exported INT8 weights.</li>
+            <li><strong>animations/</strong>: the Manim scenes and narration script used to build the accompanying video.</li>
+          </ul>
+
+          <h2>References</h2>
+          <p>What this was built on top of.</p>
+          <ul>
+            <li>
+              <a href="https://www.youtube.com/watch?v=aircAruvnKk&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank" rel="noopener">3Blue1Brown, Neural Networks</a>:
+              the explainer series this project's approach to neurons, backpropagation, and gradient descent is built on.
+            </li>
+            <li>
+              <a href="https://www.fpga4student.com/2018/08/basys-3-fpga-ov7670-camera.html" target="_blank" rel="noopener">Basys 3 + OV7670 Camera Setup, fpga4student.com</a>:
+              reference for wiring and configuring the OV7670 camera module against the Basys 3's pin header.
+            </li>
+          </ul>
+
+          <a class="back-link" href="../beyond-software.html">&larr; Back to Beyond Software</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="../assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>

@@ -732,18 +732,17 @@
       }
     }
 
-    function drawPulses(li, t) {
-      for (var i = 0; i < layers[li]; i++) {
-        for (var j = 0; j < layers[li + 1]; j++) {
-          var p1 = nodePos(li, i), p2 = nodePos(li + 1, j);
-          ctx.beginPath();
-          ctx.arc(p1[0] + (p2[0] - p1[0]) * t, p1[1] + (p2[1] - p1[1]) * t, 2.5, 0, Math.PI * 2);
-          ctx.globalAlpha = 0.85;
-          ctx.fillStyle = ACCENT;
-          ctx.fill();
-          ctx.globalAlpha = 1;
-        }
-      }
+    function drawSweep(li, t) {
+      var x1 = nodePos(li, 0)[0], x2 = nodePos(li + 1, 0)[0];
+      var x = x1 + (x2 - x1) * t;
+      ctx.strokeStyle = ACCENT;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.55;
+      ctx.beginPath();
+      ctx.moveTo(x, padY - 8);
+      ctx.lineTo(x, h - padY + 8);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
     }
 
     function tick() {
@@ -761,7 +760,7 @@
         var seg = Math.floor(c / segFrames);
         var t = (c % segFrames) / segFrames;
         drawNodes(seg);
-        drawPulses(seg, t);
+        drawSweep(seg, t);
       } else {
         drawNodes(layers.length - 1);
       }

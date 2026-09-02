@@ -898,6 +898,13 @@ code, .mono {
   color: var(--text-dim);
 }
 
+.project-body p code.mono {
+  display: block;
+  margin-top: 8px;
+  color: var(--text-dimmer);
+  font-size: 0.82rem;
+}
+
 .project-body ul, .project-body ol {
   color: var(--text-dim);
   padding-left: 20px;
