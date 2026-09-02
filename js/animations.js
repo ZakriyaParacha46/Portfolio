@@ -681,6 +681,99 @@
     return function () { cancelAnimationFrame(raf); };
   }
 
+  /* ---------------- Neural net forward pass (MLP on FPGA) ---------------- */
+  function initNeuralNet(canvas) {
+    var d = dpr(canvas), ctx = d.ctx, w = d.w, h = d.h;
+    var layers = [5, 4, 3];
+    var padX = 36, padY = 18;
+    var winner = 1;
+    var frame = 0, raf;
+
+    function nodePos(li, ni) {
+      var count = layers[li];
+      var x = padX + li * (w - padX * 2) / (layers.length - 1);
+      var gap = (h - padY * 2) / (count - 1 || 1);
+      var y = count === 1 ? h / 2 : padY + ni * gap;
+      return [x, y];
+    }
+
+    function drawEdges() {
+      ctx.strokeStyle = DIM;
+      ctx.lineWidth = 1;
+      for (var li = 0; li < layers.length - 1; li++) {
+        for (var i = 0; i < layers[li]; i++) {
+          for (var j = 0; j < layers[li + 1]; j++) {
+            var p1 = nodePos(li, i), p2 = nodePos(li + 1, j);
+            ctx.beginPath();
+            ctx.moveTo(p1[0], p1[1]);
+            ctx.lineTo(p2[0], p2[1]);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function drawNodes(activeLayer) {
+      for (var li = 0; li < layers.length; li++) {
+        var isOutput = li === layers.length - 1;
+        for (var i = 0; i < layers[li]; i++) {
+          var p = nodePos(li, i);
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], isOutput ? 7 : 5.5, 0, Math.PI * 2);
+          if (isOutput && activeLayer >= layers.length - 1 && i === winner) {
+            ctx.fillStyle = ACCENT;
+          } else if (li <= activeLayer) {
+            ctx.fillStyle = TEXT;
+          } else {
+            ctx.fillStyle = DIM;
+          }
+          ctx.fill();
+        }
+      }
+    }
+
+    function drawPulses(li, t) {
+      for (var i = 0; i < layers[li]; i++) {
+        for (var j = 0; j < layers[li + 1]; j++) {
+          var p1 = nodePos(li, i), p2 = nodePos(li + 1, j);
+          ctx.beginPath();
+          ctx.arc(p1[0] + (p2[0] - p1[0]) * t, p1[1] + (p2[1] - p1[1]) * t, 2.5, 0, Math.PI * 2);
+          ctx.globalAlpha = 0.85;
+          ctx.fillStyle = ACCENT;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      }
+    }
+
+    function tick() {
+      frame++;
+      var segFrames = 46;
+      var segs = layers.length - 1;
+      var holdFrames = 36;
+      var cycle = segFrames * segs + holdFrames;
+      var c = frame % cycle;
+
+      ctx.clearRect(0, 0, w, h);
+      drawEdges();
+
+      if (c < segFrames * segs) {
+        var seg = Math.floor(c / segFrames);
+        var t = (c % segFrames) / segFrames;
+        drawNodes(seg);
+        drawPulses(seg, t);
+      } else {
+        drawNodes(layers.length - 1);
+      }
+
+      raf = requestAnimationFrame(tick);
+    }
+
+    if (reduced) { drawEdges(); drawNodes(layers.length - 1); return function () {}; }
+    tick();
+    return function () { cancelAnimationFrame(raf); };
+  }
+
   var registry = {
     tictactoe: function (el) { return initTicTacToe(el); },
     "adder-ripple": function (el) { return initAdder(el, "ripple"); },
@@ -692,6 +785,7 @@
     braille: function (el) { return initBraille(el); },
     feature: function (el) { return initFeatureScan(el); },
     plotter: function (el) { return initPlotter(el); },
+    neural: function (el) { return initNeuralNet(el); },
     waveform: function (el) { return initWaveform(el); },
     tree: function (el) { return initTree(el); }
   };
