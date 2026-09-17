@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FFT and Audio Visualizer on FPGA | Zakriya Asif Paracha</title>
+  <meta name="description" content="A 256-bin audio spectrum analyzer built entirely from scratch in raw Verilog on a Basys3 FPGA, with no CPU, no vendor FFT core, and no simulator in the debugging loop." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="FFT and Audio Visualizer on FPGA" />
+  <meta property="og:description" content="A 256-bin audio spectrum analyzer built entirely from scratch in raw Verilog on a Basys3 FPGA, with no CPU, no vendor FFT core, and no simulator in the debugging loop." />
+  <meta property="og:image" content="../assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="canonical" href="https://zakriyaparacha.com/beyond-software/fpga-audio-spectrum.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a class="logo" href="../index.html"><span class="bracket">&lt;</span>zakriya paracha<span class="bracket">/&gt;</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../projects.html">Projects</a></li>
+        <li><a href="../courses.html">Courses</a></li>
+        <li><a href="../beyond-software.html" aria-current="page">Beyond Software</a></li>
+        <li><a href="../resume.html">Resume</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="section">
+      <div class="container">
+        <div class="project-detail-header">
+          <div class="section-label">// digital signal processing / embedded &middot; 2026</div>
+          <h1>FFT and Audio Visualizer on FPGA</h1>
+          <div class="project-detail-meta">
+            <span class="tag">Verilog</span>
+            <span class="tag">Goertzel DFT</span>
+            <span class="tag">XADC</span>
+            <span class="tag">VGA</span>
+            <span class="tag">Basys 3</span>
+          </div>
+          <div class="project-detail-links">
+            <a href="https://github.com/ZakriyaParacha46/fpga-audio-spectrum-analyzer" target="_blank" rel="noopener">GitHub &#8599;</a>
+            <a href="https://www.youtube.com/watch?v=MUcwDwSObPo" target="_blank" rel="noopener">Watch on YouTube &#8599;</a>
+          </div>
+        </div>
+
+        <div class="project-body">
+          <canvas class="project-animation project-animation-large" data-anim="spectrum" width="560" height="340" role="img" aria-label="Animated 256-bar audio spectrum sweeping and settling into a peaked frequency envelope"></canvas>
+
+          <h2>Overview</h2>
+          <p>
+            A 256-bin audio spectrum analyzer built entirely from scratch in raw Verilog on a
+            Basys3 FPGA. There is no CPU, no operating system, and no vendor FFT core anywhere
+            in the design &mdash; every resonator, filter, and pixel on the VGA display is
+            hand-written, verified the hard way: synthesize, implement, flash, and read the
+            screen, with no simulator in the loop. It's part two of a series that started with
+            <a href="neural-net-fpga.html">Neural Network on an FPGA</a>, same no-CPU,
+            no-vendor-IP constraint, this time applied to real-time DSP instead of ML inference.
+          </p>
+
+          <div class="stat-grid">
+            <div class="stat-card">
+              <span class="num">256</span>
+              <span class="label">frequency bins, each its own Goertzel resonator</span>
+            </div>
+            <div class="stat-card">
+              <span class="num">512</span>
+              <span class="label">sample window per bin, over a real-valued input signal</span>
+            </div>
+            <div class="stat-card">
+              <span class="num">&#126;2ms</span>
+              <span class="label">full 256-bin sweep: 131,072 cycles at 65MHz</span>
+            </div>
+            <div class="stat-card">
+              <span class="num">0</span>
+              <span class="label">vendor FFT IP cores in the final design</span>
+            </div>
+          </div>
+
+          <h2>Audio in</h2>
+          <p>
+            A generic electret-mic sensor module feeds the Basys3's XADC, which only accepts
+            0&ndash;1V on its analog input pins. The sensor's output swings well above that, so
+            an external 10k&Omega;/10k&Omega; resistor divider attenuates it before it reaches
+            <code class="mono">JXADC</code> pin 1, with the channel's N pin tied straight to
+            ground since the XADC is a differential input. The result is a clean 12-bit,
+            0&ndash;4095 sample, exposed by a driver that knows nothing about filters, VGA, or
+            the FFT downstream &mdash; just "here is the current level."
+            <code class="mono">audio_driver.v</code>
+          </p>
+
+          <h2>Why Goertzel, not a radix-2 FFT</h2>
+          <p>
+            The first version of this pipeline used Xilinx's own FFT LogiCORE IP. Getting it
+            running required a runtime scaling schedule pushed through an AXI-Stream config
+            port, with no fixed, compile-time option exposed anywhere in the IP wizard. Several
+            rounds of debugging output that looked scattered and random eventually traced back
+            to an all-zero scaling schedule silently overflowing inside the core &mdash; a black
+            box with no way to check the fix against a bit-accurate datasheet diagram, and no
+            simulator on hand to step through it. The vendor IP was dropped for a hand-written,
+            fully self-contained 128-point radix-2 FFT instead, with scaling made provably safe
+            by construction: dividing every butterfly output by two, every stage, bounds the
+            result so it can never overflow.
+          </p>
+          <p>
+            The final design goes one step further and drops the FFT butterfly network too, in
+            favor of a bank of 256 Goertzel resonators. Both are legitimate ways to compute a
+            DFT and give identical per-bin magnitudes for a fixed set of bins, but Goertzel's
+            control logic is a plain nested loop &mdash; no bit-reversal addressing, no staged
+            twiddle-factor indexing &mdash; which matters a lot when the only way to test a
+            change is a full synthesize-implement-bitstream-hardware cycle, with nothing to
+            simulate against locally.
+            <code class="mono">fft_view.v</code>
+          </p>
+
+          <h2>The signal path</h2>
+          <p>Analog audio in, a 1024&times;768 VGA frame out, three live views on screen at once.</p>
+
+          <h3>01. Audio capture</h3>
+          <p>
+            XADC Wizard IP, single channel, continuous mode, unipolar, reading channel VAUX6.
+            <code class="mono">audio_driver.v</code>
+          </p>
+
+          <h3>02. Complementary lowpass / highpass split</h3>
+          <p>
+            Two single-pole IIR filters run on the same audio-rate signal. The lowpass is a
+            plain exponential moving average; the highpass reuses the exact same recurrence and
+            just subtracts it from the input, since <em>input = lowpass(input) +
+            highpass(input)</em> by construction &mdash; lower risk than inventing a second
+            filter equation blind. Both cutoffs are live-adjustable from the board: a switch
+            picks which filter, and two buttons step its cutoff up or down.
+            <code class="mono">lowpass_filter.v, highpass_filter.v</code>
+          </p>
+
+          <h3>03. Waveform view</h3>
+          <p>
+            The raw trace and the band-passed trace are drawn side by side in the top half of
+            the frame, so the effect of the live filter cutoffs is visible directly against the
+            unfiltered signal.
+            <code class="mono">waveform_view.v</code>
+          </p>
+
+          <h3>04. Spectrum view: 256 Goertzel resonators</h3>
+          <p>
+            Each of the 256 displayed bins runs its own Goertzel recurrence over a 512-sample
+            window, computing power (magnitude squared, no square root needed) rather than a
+            classic FFT butterfly pass. Bin 0 (DC) is skipped, so bins 1&ndash;256 cover the
+            whole unique half of a real-valued input's Hermitian-symmetric spectrum. Power gets
+            compressed with an approximate log2 before it becomes a bar height, so the display
+            has log-like dynamic range instead of blocky power-of-two jumps.
+            <code class="mono">fft_view.v</code>
+          </p>
+
+          <h3>05. Display composition</h3>
+          <p>
+            All three views tile onto one 1024&times;768@60Hz VGA frame: raw waveform top-left,
+            filtered signal top-right, the 256-bin spectrum along the bottom, with a blue and a
+            purple vertical marker tracking whichever filter's cutoff is currently being
+            adjusted.
+            <code class="mono">top.v, vga_timing.v</code>
+          </p>
+
+          <figure class="project-figure">
+            <img src="../assets/projects/fpga-audio-spectrum/vga-display.jpg" alt="The live VGA output on a real monitor: the raw waveform trace above, the 256-bin spectrum below with pink and blue cutoff markers" loading="lazy" width="1600" height="962" />
+            <figcaption>The actual VGA output, captured off the monitor mid-run &mdash; not a rendering.</figcaption>
+          </figure>
+
+          <h2>Repository</h2>
+          <p>Cleanly separated: the Vivado project, and the video explainer built alongside it.</p>
+          <ul>
+            <li><strong>FFTspectrum/</strong>: the Vivado project &mdash; every hand-written Verilog module (<code class="mono">audio_driver</code>, <code class="mono">lowpass_filter</code>, <code class="mono">highpass_filter</code>, <code class="mono">waveform_view</code>, <code class="mono">fft_view</code>, <code class="mono">vga_timing</code>, <code class="mono">top</code>) plus the generated XADC and clocking-wizard IP.</li>
+            <li><strong>scenes/</strong>: the Manim scenes and narration script used to build the accompanying video, one folder per concept &mdash; sampling, Nyquist, filters, the DFT, the Goertzel algorithm, log compression.</li>
+            <li><strong>scripts/</strong>: release automation for publishing the video build.</li>
+          </ul>
+
+          <h2>References</h2>
+          <p>What this was built on top of.</p>
+          <ul>
+            <li>
+              <a href="https://www.youtube.com/watch?v=spUNpyF58BY" target="_blank" rel="noopener">3Blue1Brown, But what is the Fourier Transform?</a>:
+              the intuition this project's approach to the DFT and Goertzel resonators is built on.
+            </li>
+            <li>
+              <a href="https://www.youtube.com/watch?v=h7apO7q16V0" target="_blank" rel="noopener">Reducible, The Fast Fourier Transform: Most Ingenious Algorithm Ever?</a>:
+              the Cooley-Tukey butterfly algorithm this project's earlier hand-written FFT attempt was built against.
+            </li>
+          </ul>
+
+          <a class="back-link" href="../beyond-software.html">&larr; Back to Beyond Software</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Zakriya Asif Paracha</h4>
+        <p class="text-dim">Software Engineer<br />Rawalpindi / Islamabad, Pakistan</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:zakriyaparacha@gmail.com">zakriyaparacha@gmail.com</a></li>
+          <li><a href="tel:+923045113736">+92 304 5113736</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/ZakriyaParacha46" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/zakriya-paracha/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="../assets/resume.pdf">Download Resume (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Zakriya Asif Paracha</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/animations.js"></script>
+</body>
+</html>

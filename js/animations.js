@@ -609,6 +609,51 @@
     return function () { cancelAnimationFrame(raf); };
   }
 
+  /* ---------------- 256-bin Goertzel spectrum sweep ---------------- */
+  function initSpectrum(canvas) {
+    var d = dpr(canvas), ctx = d.ctx, w = d.w, h = d.h;
+    var bars = 48;
+    var gap = 2;
+    var barW = (w - gap * (bars - 1)) / bars;
+    var heights = [];
+    for (var i = 0; i < bars; i++) {
+      var envelope = Math.exp(-Math.pow((i - bars * 0.22) / (bars * 0.16), 2)) * 0.9
+        + Math.exp(-Math.pow((i - bars * 0.55) / (bars * 0.1), 2)) * 0.55
+        + Math.exp(-Math.pow((i - bars * 0.8) / (bars * 0.14), 2)) * 0.35;
+      heights.push(envelope);
+    }
+    var frame = 0, raf, sweepIdx = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for (var i = 0; i < bars; i++) {
+        var jitter = 0.85 + 0.15 * Math.sin(frame / 9 + i * 1.7);
+        var amp = Math.max(0.03, heights[i] * jitter);
+        var barH = amp * h * 0.92;
+        var x = i * (barW + gap);
+        var lit = i <= sweepIdx;
+        ctx.fillStyle = lit ? ACCENT : DIM;
+        ctx.globalAlpha = lit ? (i === sweepIdx ? 1 : 0.85) : 0.3;
+        ctx.fillRect(x, h - barH, barW, barH);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function tick() {
+      frame++;
+      if (frame % 2 === 0) {
+        sweepIdx++;
+        if (sweepIdx > bars + 10) sweepIdx = 0;
+      }
+      draw();
+      raf = requestAnimationFrame(tick);
+    }
+
+    if (reduced) { sweepIdx = bars; draw(); return function () {}; }
+    tick();
+    return function () { cancelAnimationFrame(raf); };
+  }
+
   /* ---------------- Boolean binary tree build ---------------- */
   function initTree(canvas) {
     var d = dpr(canvas), ctx = d.ctx, w = d.w, h = d.h;
@@ -786,7 +831,8 @@
     plotter: function (el) { return initPlotter(el); },
     neural: function (el) { return initNeuralNet(el); },
     waveform: function (el) { return initWaveform(el); },
-    tree: function (el) { return initTree(el); }
+    tree: function (el) { return initTree(el); },
+    spectrum: function (el) { return initSpectrum(el); }
   };
 
   function boot() {
