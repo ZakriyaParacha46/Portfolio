@@ -79,6 +79,10 @@
             sources it retrieves, and labels each one as a Rule, a Law or Guidance.
           </p>
 
+          <figure class="project-figure">
+            <img src="../assets/projects/cpsc-compliance-assistant/demo.gif" width="960" height="570" alt="Demo of the assistant: a compliance question streams back a cited answer, and clicking a citation opens the highlighted source passage" loading="lazy" />
+          </figure>
+
           <div class="stat-grid">
             <div class="stat-card">
               <span class="num">701</span>
@@ -106,6 +110,10 @@
             <li><strong>Answer.</strong> Claude Haiku 4.5 on Bedrock writes the answer only from those six passages, and the answer streams to the browser. Code then checks every <code>[n]</code> citation, and an answer with missing or invalid citations becomes "not covered" rather than a guess.</li>
           </ol>
 
+          <figure class="project-figure">
+            <img src="../assets/projects/cpsc-compliance-assistant/langchain.gif" width="960" height="600" alt="Animated LangChain pipeline: ingest and chunk, Titan embeddings, PGVector store, hybrid retriever, classifier and answer LCEL chains, citation check and streaming, with fakes swapped in for tests" loading="lazy" />
+          </figure>
+
           <h3>Guardrails</h3>
           <ul>
             <li>A Haiku classifier turns away off-topic questions and prompt-injection attempts before retrieval, and a distance threshold catches anything the sources don't cover.</li>
@@ -129,6 +137,10 @@
             <li><strong>CloudFormation:</strong> two stacks describe the whole setup as code, one for the server and one for the public edge.</li>
             <li><strong>IAM, OIDC and SSM:</strong> no stored AWS keys anywhere. The server uses an instance role, and a push to <code>main</code> runs the tests, then GitHub Actions assumes a short-lived role via OIDC and uses SSM to deploy on the server, then smoke-tests the live site.</li>
           </ul>
+
+          <figure class="project-figure">
+            <img src="../assets/projects/cpsc-compliance-assistant/request-flow.gif" width="960" height="600" alt="Animated request flow: browser, DNS, CloudFront with ACM, S3 for the site, then /api/ask through the firewall, Caddy and FastAPI to the Bedrock classifier, Titan, pgvector and BM25, and back as a streamed, citation-checked Claude answer" loading="lazy" />
+          </figure>
           <p>
             All of it runs for roughly $17 a month for the server, plus about $7 in model
             usage per thousand questions.
