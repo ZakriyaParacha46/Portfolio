@@ -609,6 +609,91 @@
     return function () { cancelAnimationFrame(raf); };
   }
 
+  /* ---------------- RAG: retrieve sources, answer with citations ---------------- */
+  function initRag(canvas) {
+    var d = dpr(canvas), ctx = d.ctx, w = d.w, h = d.h;
+    var docs = ["RULE", "LAW", "GUIDE", "RULE", "GUIDE", "LAW"];
+    var picks = [[0, 1, 4], [3, 2, 5], [1, 0, 2]];
+    var frame = 0, raf;
+    var pad = Math.max(8, w * 0.04);
+    var docW = w * 0.26, docH = (h - pad * 2) / docs.length - 4;
+    var qx = w * 0.44, qy = h / 2;
+    var ax = w * 0.56, aw = w - ax - pad;
+    var font = Math.max(8, Math.round(h * 0.055));
+
+    function docY(i) { return pad + i * (docH + 4); }
+
+    function draw(t, set) {
+      ctx.clearRect(0, 0, w, h);
+      ctx.font = "600 " + font + "px monospace";
+      ctx.textBaseline = "middle";
+
+      // Retrieval lines from the question node out to the chosen sources.
+      var reach = Math.min(1, t / 40);
+      set.forEach(function (i) {
+        var ty = docY(i) + docH / 2;
+        ctx.strokeStyle = ACCENT;
+        ctx.globalAlpha = 0.6;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(qx, qy);
+        ctx.lineTo(qx + (pad + docW - qx) * reach, qy + (ty - qy) * reach);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      });
+
+      docs.forEach(function (label, i) {
+        var y = docY(i);
+        var n = set.indexOf(i);
+        var lit = n >= 0 && t > 40;
+        ctx.strokeStyle = lit ? ACCENT : DIM;
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(pad, y, docW, docH);
+        ctx.fillStyle = lit ? ACCENT : TEXT;
+        ctx.textAlign = "left";
+        ctx.fillText(label, pad + 6, y + docH / 2);
+        if (lit) {
+          ctx.textAlign = "right";
+          ctx.fillText("[" + (n + 1) + "]", pad + docW - 6, y + docH / 2);
+        }
+      });
+
+      ctx.beginPath();
+      ctx.arc(qx, qy, font * 0.9, 0, Math.PI * 2);
+      ctx.fillStyle = ACCENT;
+      ctx.fill();
+      ctx.fillStyle = "#0d1117";
+      ctx.textAlign = "center";
+      ctx.fillText("?", qx, qy + 1);
+
+      // Answer lines stream in, each ending in a citation.
+      var lines = 3, lh = font * 2.2, top = qy - lh;
+      for (var k = 0; k < lines; k++) {
+        var p = Math.max(0, Math.min(1, (t - 60 - k * 30) / 30));
+        if (!p) continue;
+        var y = top + k * lh;
+        var len = (aw - font * 2.4) * (k === lines - 1 ? 0.6 : 1) * p;
+        ctx.fillStyle = DIM;
+        ctx.fillRect(ax, y - 3, len, 6);
+        if (p === 1) {
+          ctx.fillStyle = ACCENT;
+          ctx.textAlign = "left";
+          ctx.fillText("[" + (k + 1) + "]", ax + len + 4, y);
+        }
+      }
+    }
+
+    function tick() {
+      frame++;
+      draw(frame % 220, picks[Math.floor(frame / 220) % picks.length]);
+      raf = requestAnimationFrame(tick);
+    }
+
+    if (reduced) { draw(200, picks[0]); return function () {}; }
+    tick();
+    return function () { cancelAnimationFrame(raf); };
+  }
+
   /* ---------------- 256-bin Goertzel spectrum sweep ---------------- */
   function initSpectrum(canvas) {
     var d = dpr(canvas), ctx = d.ctx, w = d.w, h = d.h;
@@ -832,7 +917,8 @@
     neural: function (el) { return initNeuralNet(el); },
     waveform: function (el) { return initWaveform(el); },
     tree: function (el) { return initTree(el); },
-    spectrum: function (el) { return initSpectrum(el); }
+    spectrum: function (el) { return initSpectrum(el); },
+    rag: function (el) { return initRag(el); }
   };
 
   function boot() {
